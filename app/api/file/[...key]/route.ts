@@ -27,16 +27,21 @@ export async function GET(
       });
     }
 
-    const bytes = await result.Body.transformToByteArray();
+    const byteArray = await result.Body.transformToByteArray();
 
-    return new Response(bytes, {
+    // Next.js 16 / TypeScript Response uyumluluğu
+    const buffer = new ArrayBuffer(byteArray.byteLength);
+    new Uint8Array(buffer).set(byteArray);
+
+    return new Response(buffer, {
+      status: 200,
       headers: {
         "Content-Type":
           result.ContentType || "application/octet-stream",
 
         "Content-Length":
           result.ContentLength?.toString() ||
-          bytes.length.toString(),
+          byteArray.byteLength.toString(),
 
         "Cache-Control":
           "public, max-age=300, s-maxage=300",
