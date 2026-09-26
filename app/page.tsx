@@ -15,8 +15,7 @@ function encodeR2Path(path: string) {
 }
 
 function getPublicUrl(key: string) {
-  const base = (process.env.R2_PUBLIC_URL || "").replace(/\/$/, "");
-  return `${base}/${encodeR2Path(key)}`;
+  return `/api/file/${encodeR2Path(key)}`;
 }
 
 function getParentPath(currentPath: string) {
